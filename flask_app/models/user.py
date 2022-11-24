@@ -2,7 +2,7 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 
 class User:
-    db_name='users_cr'
+    db_name='usermodularised'
     def __init__(self,data):
         self.id = data['id']
         self.firstname = data['firstname']
@@ -22,6 +22,21 @@ class User:
 
     @classmethod
     def Create_user(cls,data):
-        query = """INSERT INTO users (first_name, last_name, email) VALUES (%(firstname)s, %(lastname)s, %(email)s)"""
+        query = """INSERT INTO users (firstname, lastname, email) VALUES (%(firstname)s, %(lastname)s, %(email)s)"""
         results = connectToMySQL(cls.db_name).query_db(query,data)
+
+    @classmethod
+    def get_user_by_id(cls, data):
+        query= 'SELECT * FROM users WHERE users.id = %(user_id)s;'
+        results = connectToMySQL(cls.db_name).query_db(query, data)
+        return results[0]
+
+    @classmethod
+    def destroyUser(cls, data):
+        query= 'DELETE FROM users WHERE users.id = %(user_id)s;'
+        return connectToMySQL(cls.db_name).query_db(query, data)
     
+    @classmethod
+    def editUser(cls, data):
+        query= 'Update users set firstname=%(firstname)s, lastname= %(lastname)s, email=%(email)s, updated_at=NOW() WHERE users.id = %(user_id)s;'
+        return connectToMySQL(cls.db_name).query_db(query, data)

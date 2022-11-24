@@ -4,9 +4,7 @@ from flask_app.models.user import User
 
 @app.route('/')
 def index():
-    if user not in session:
-        return redirect('/logout')
-    return render_template('users.html')
+    return redirect('/users')
 
 @app.route('/users')
 def showUsers():
@@ -26,6 +24,46 @@ def AddUser():
     }
     User.Create_user(data)
     return redirect('/users')
+
+@app.route('/show/<int:id>')
+def profile(id):
+    data = {
+            'user_id': id
+    }
+    user = User.get_user_by_id(data)
+    return render_template('showUser.html', user= user)
+
+
+@app.route('/delete/<int:id>')
+def deleteUser(id):
+    data = {
+        'user_id': id
+    }
+    user = User.get_user_by_id(data)
+    # if session['user_id']==User['user_id']:
+    User.destroyUser(data)
+        # return redirect(request.referrer)
+    return redirect(request.referrer)
+
+@app.route('/showEditUser/<int:id>')
+def ShowEditUser(id):
+    data = {
+            'user_id': id
+    }
+    user = User.get_user_by_id(data)
+    return render_template('editUser.html', user= user)
+
+@app.route('/edit/<int:id>', methods=['POST'])
+def edit_user(id):
+    data = {
+        'user_id': id,
+        'firstname':request.form['firstname'],
+        'lastname':request.form['lastname'],
+        'email':request.form['email']
+    }
+    User.editUser(data)
+    return redirect('/users')
+
 
 @app.route('/logout')
 def Logout():

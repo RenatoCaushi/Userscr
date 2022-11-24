@@ -9,16 +9,36 @@
 </head>
 
 <body>
-    <h1>All Users</h1>
-    {% if not users %}
-    <p>There are not users yet</p>
-    {% endif %}
+<table class="table">
+    <th class="row">
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Email Name</td>
+        <td>Created At</td>
+        <td>Actions</td>
+    </th>
     {% for user in users %}
-    <p>{{user.first_name}} {{user.last_name}}</p>
-
+        {% if not users %}
+            <p>There are not users yet</p>
+        {% endif %}
+    <tr class="row">
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.created_at}}</td>
+        <td>
+            <a href="/show/{{user.id}}">Show</a>
+            <a href="/showEditUser/{{user.id}}">Edit</a>
+            <a href="/delete/{{user.id}}">Delete</a>
+        </td>
+    </tr>
     {% endfor %}
+</table>
     <a href="/users/new">Create a new user</a>
     <a href="/logout">Logout</a>
+
+
+
 </body>
 
 </html>
